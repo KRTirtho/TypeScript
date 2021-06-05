@@ -5830,7 +5830,7 @@ namespace ts {
         reportsUnnecessary?: {};
         reportsDeprecated?: {};
         /* @internal */
-        elidedInCompatabilityPyramid?: boolean;
+        elidedInCompatibilityPyramid?: boolean;
     }
 
     /**

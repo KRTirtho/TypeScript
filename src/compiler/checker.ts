@@ -17571,10 +17571,10 @@ namespace ts {
                     secondaryRootErrors.shift();
                 }
                 for (const [msg, ...args] of secondaryRootErrors) {
-                    const originalValue = msg.elidedInCompatabilityPyramid;
-                    msg.elidedInCompatabilityPyramid = false; // Temporarily override elision to ensure error is reported
+                    const originalValue = msg.elidedInCompatibilityPyramid;
+                    msg.elidedInCompatibilityPyramid = false; // Temporarily override elision to ensure error is reported
                     reportError(msg, ...args);
-                    msg.elidedInCompatabilityPyramid = originalValue;
+                    msg.elidedInCompatibilityPyramid = originalValue;
                 }
                 if (info) {
                     // Actually do the last relation error
@@ -17585,7 +17585,7 @@ namespace ts {
             function reportError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
                 Debug.assert(!!errorNode);
                 if (incompatibleStack.length) reportIncompatibleStack();
-                if (message.elidedInCompatabilityPyramid) return;
+                if (message.elidedInCompatibilityPyramid) return;
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2, arg3);
             }
 

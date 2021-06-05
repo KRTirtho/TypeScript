@@ -1,0 +1,17 @@
+[package]
+name = "typescript"
+version = "0.1.0"
+description = "CPU counter"
+authors = ["KRTirtho"]
+license = "MIT"
+edition = "2018"
+exclude = ["index.node"]
+
+[lib]
+crate-type = ["cdylib"]
+path = "src-native/lib.rs"
+
+[dependencies.neon]
+version = "0.8"
+default-features = false
+features = ["napi-6"]

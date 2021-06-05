@@ -60,6 +60,7 @@
         "azure-devops-node-api": "^10.1.0",
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
+        "cargo-cp-artifact": "^0.1.4",
         "chai": "latest",
         "chalk": "latest",
         "convert-source-map": "latest",
