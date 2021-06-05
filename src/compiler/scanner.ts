@@ -293,33 +293,7 @@ namespace ts {
     const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
 
     function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
-        // Bail out quickly if it couldn't possibly be in the map.
-        if (code < map[0]) {
-            return false;
-        }
-
-        // Perform binary search in one of the Unicode range maps
-        let lo = 0;
-        let hi: number = map.length;
-        let mid: number;
-
-        while (lo + 1 < hi) {
-            mid = lo + (hi - lo) / 2;
-            // mid has to be even to catch a range's beginning
-            mid -= mid % 2;
-            if (map[mid] <= code && code <= map[mid + 1]) {
-                return true;
-            }
-
-            if (code < map[mid]) {
-                hi = mid;
-            }
-            else {
-                lo = mid + 2;
-            }
-        }
-
-        return false;
+        return native.lookupInUnicodeMap(code, map);
     }
 
     /* @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget | undefined) {

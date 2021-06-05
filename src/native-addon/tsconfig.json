@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/native.js",
+        "types": ["node"]
+    },
+    "files": [
+        "addon.ts",
+    ]
+}
