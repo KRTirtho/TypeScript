@@ -102,10 +102,9 @@
   },
   "scripts": {
     "addon:artifacts": "napi artifacts -c native/napi.config.json",
-    "addon:build": "napi build --platform --release -c native/napi.config.json --cargo-cwd native src",
-    "addon:build:debug": "napi build --platform -c native/napi.config.json --cargo-cwd native src",
+    "addon:build": "napi build --platform --release -c native/napi.config.json --cargo-cwd native built/local",
+    "addon:build:debug": "napi build --platform -c native/napi.config.json --cargo-cwd native built/local",
     "addon:prepublishOnly": "napi prepublish -c native/napi.config.json --cargo-cwd native -t npm",
-    "addon:version": "napi version -c native/napi.config.json --prefix native/npm",
     "prepare": "gulp build-eslint-rules",
     "pretest": "gulp tests",
     "test": "gulp runtests-parallel --light=false",

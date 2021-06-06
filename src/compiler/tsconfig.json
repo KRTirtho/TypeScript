@@ -6,10 +6,7 @@
             "node"
         ]
     },
-    "references": [
-        { "path": "../shims" },
-        { "path": "../native-addon" }
-    ],
+    "references": [{ "path": "../shims" }],
     "files": [
         "corePublic.ts",
         "core.ts",
@@ -65,6 +62,7 @@
         "transformers/declarations/diagnostics.ts",
         "transformers/declarations.ts",
         "transformer.ts",
+        "native/addon.ts",
         "emitter.ts",
         "watchUtilities.ts",
         "program.ts",

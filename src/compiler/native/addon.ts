@@ -701,57 +701,20 @@ namespace ts {
         },
     });
 
-    export function loadBinding(
-        dirname: string,
-        filename = "index",
-        packageName?: string
-    ) {
+    function loadNativeAddon(filename = "index") {
         const platformName = platform();
         const archName = arch();
         const triples = platformArchTriples[platformName][archName];
         for (const triple of triples) {
             // resolve in node_modules
-            if (packageName) {
-                return require(require.resolve(
-                    `${packageName}-${triple.platformArchABI}`,
-                    { paths: [dirname] }
-                ));
-                // eslint-disable-next-line no-empty
-            }
-            const localFilePath = join(
-                dirname,
-                `${filename}.${triple.platformArchABI}.node`
-            );
-            if (existsSync(localFilePath)) {
-                return require(localFilePath);
-            }
+            const localFilePath = `./${filename}.${triple.platformArchABI}.node`;
+            return require(localFilePath);
         }
-
-        const errorMsg = `Can not find node binding files from ${
-            packageName
-                ? triples
-                      .map(
-                          (triple: Record<string, string>) =>
-                              `${packageName}-${triple.platformArchABI}`
-                      )
-                      .join(", ")
-                : ""
-        } ${packageName ? "and " : ""}${triples
-            .map((triple: Record<string, string>) =>
-                join(dirname, `${filename}.${triple.platformArchABI}.node`)
-            )
-            .join(", ")}`;
-
-        throw new TypeError(errorMsg);
     }
 
     // exported addon properties, function, classes, values
     export interface AddonExports {
         lookupInUnicodeMap(code: number, map: readonly number[]): boolean;
     }
-    export const native: AddonExports = loadBinding(
-        join(__dirname, "..", "..", "src-native"),
-        "typescript",
-        "typescript"
-    );
+    export const native: AddonExports = loadNativeAddon();
 }

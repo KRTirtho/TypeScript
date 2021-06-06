@@ -1,8 +1,6 @@
 {
     "files": [],
-    "include": [
-        "index.*.node"
-    ],
+    "include": [],
     "references": [
         { "path": "./shims" },
         { "path": "./tsc" },

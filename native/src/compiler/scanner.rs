@@ -1,3 +1,8 @@
+use std::convert::TryInto;
+
+use napi::{CallContext, JsBoolean, JsNumber, JsObject, Result};
+use napi_derive::js_function;
+
 use super::types::{
     CommentDirective, IDiagnosticMessage, JSDocSyntaxKind, JsxTokenSyntaxKind, LanguageVariant,
     PunctuationSyntaxKind, ScriptTarget, SyntaxKind, TokenFlags, TokenSyntaxKind,
@@ -90,27 +95,29 @@ const COMMENT_DIRECTIVE_REG_EX_SINGLE_LINE: &str = "^///?\\s*@(ts-expect-error|t
 
 const COMMENT_DIRECTIVE_REG_EX_MULTI_LINE: &str = "^(?:/|*)*\\s*@(ts-expect-error|ts-ignore)";
 
-pub fn lookup_in_unicode_map(mut cx: FunctionContext) -> JsResult<JsBoolean> {
-    let code = cx
-        .argument::<JsNumber>(0)
-        .expect("argument of type number expected")
-        .value(&mut cx) as usize;
-    let map_raw = cx
-        .argument::<JsArray>(1)
-        .expect("expected map to be an array");
-    let map: Vec<usize> = map_raw
-        .to_vec(&mut cx)
-        .unwrap_or(Vec::new())
-        .into_iter()
-        .map(|raw_val| {
-            raw_val
-                .downcast(&mut cx)
-                .unwrap_or(JsNumber::new(&mut cx, 0))
-                .value(&mut cx) as usize
-        })
-        .collect();
+#[js_function(2)]
+pub fn lookup_in_unicode_map(mut cx: CallContext) -> Result<JsBoolean> {
+    let code: u32 = cx
+        .get::<JsNumber>(0)?
+        .try_into()
+        .expect("argument of type number expected");
+    let array_of_number_err = "expected an array";
+    let map_raw = cx.get::<JsObject>(1).expect(array_of_number_err);
+    let mut map: Vec<u32> = Vec::new();
+    let validating_err = "error on array validating";
+    if map_raw.is_array().expect(validating_err) {
+        for index in 0..map_raw.get_array_length().expect(validating_err) {
+            map.push(
+                map_raw
+                    .get_element::<JsNumber>(index)
+                    .expect("element in has correct index but doesn't exist")
+                    .try_into()
+                    .expect(array_of_number_err),
+            );
+        }
+    }
     if code < map[0] {
-        return Ok(cx.boolean(false));
+        return cx.env.get_boolean(false);
     }
 
     let mut lo = 0;
@@ -122,7 +129,7 @@ pub fn lookup_in_unicode_map(mut cx: FunctionContext) -> JsResult<JsBoolean> {
         // mid has to be even to catch a range's beginning
         mid -= mid % 2;
         if map[mid] <= code && code <= map[mid + 1] {
-            return Ok(cx.boolean(true));
+            return cx.env.get_boolean(true);
         }
 
         if code < map[mid] {
@@ -132,5 +139,5 @@ pub fn lookup_in_unicode_map(mut cx: FunctionContext) -> JsResult<JsBoolean> {
         }
     }
 
-    Ok(cx.boolean(false))
+    cx.env.get_boolean(true)
 }
