@@ -1,0 +1,20 @@
+[package]
+name = "typescript"
+version = "0.1.0"
+description = "TypeScript is a language for application scale JavaScript development"
+authors = ["KRTirtho"]
+license = "MIT"
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi = "1"
+napi-derive = "1"
+
+[build-dependencies]
+napi-build = "1"
+
+[profile.release]
+lto = true

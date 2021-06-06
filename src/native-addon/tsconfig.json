@@ -1,8 +1,10 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
+        "esModuleInterop": true,
+        "composite": true,
         "outFile": "../../built/local/native.js",
-        "types": ["node"]
+        "types": ["node"],
     },
     "files": [
         "addon.ts",

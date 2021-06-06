@@ -1,5 +1,3 @@
-use neon::prelude::*;
-
 use super::types::{
     CommentDirective, IDiagnosticMessage, JSDocSyntaxKind, JsxTokenSyntaxKind, LanguageVariant,
     PunctuationSyntaxKind, ScriptTarget, SyntaxKind, TokenFlags, TokenSyntaxKind,

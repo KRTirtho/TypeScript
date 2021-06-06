@@ -1,0 +1,13 @@
+{
+  "name": "typescript-win32-x64-msvc",
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "index.win32-x64-msvc.node",
+  "files": [
+    "index.win32-x64-msvc.node"
+  ]
+}

@@ -2,14 +2,14 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "outFile": "../../built/local/compiler.js",
-        "types": ["node"]
+        "types": [
+            "node"
+        ]
     },
-
     "references": [
         { "path": "../shims" },
-        {"path": "../native-addon"}
+        { "path": "../native-addon" }
     ],
-
     "files": [
         "corePublic.ts",
         "core.ts",
@@ -19,7 +19,6 @@
         "performance.ts",
         "perfLogger.ts",
         "tracing.ts",
-
         "types.ts",
         "sys.ts",
         "path.ts",
@@ -39,7 +38,6 @@
         "parser.ts",
         "commandLineParser.ts",
         "moduleNameResolver.ts",
-
         "binder.ts",
         "symbolWalker.ts",
         "checker.ts",

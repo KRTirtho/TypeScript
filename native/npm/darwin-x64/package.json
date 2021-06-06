@@ -1,0 +1,13 @@
+{
+  "name": "typescript-darwin-x64",
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "index.darwin-x64.node",
+  "files": [
+    "index.darwin-x64.node"
+  ]
+}
