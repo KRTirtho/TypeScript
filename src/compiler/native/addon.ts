@@ -715,6 +715,7 @@ namespace ts {
     // exported addon properties, function, classes, values
     export interface AddonExports {
         lookupInUnicodeMap(code: number, map: readonly number[]): boolean;
+        computeLineStarts(text: string): number[];
     }
     export const native: AddonExports = loadNativeAddon();
 }

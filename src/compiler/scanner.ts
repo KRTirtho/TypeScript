@@ -330,32 +330,33 @@ namespace ts {
 
     /* @internal */
     export function computeLineStarts(text: string): number[] {
-        const result: number[] = new Array();
-        let pos = 0;
-        let lineStart = 0;
-        while (pos < text.length) {
-            const ch = text.charCodeAt(pos);
-            pos++;
-            switch (ch) {
-                case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
-                        pos++;
-                    }
-                // falls through
-                case CharacterCodes.lineFeed:
-                    result.push(lineStart);
-                    lineStart = pos;
-                    break;
-                default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && isLineBreak(ch)) {
-                        result.push(lineStart);
-                        lineStart = pos;
-                    }
-                    break;
-            }
-        }
-        result.push(lineStart);
-        return result;
+        // const result: number[] = new Array();
+        // let pos = 0;
+        // let lineStart = 0;
+        // while (pos < text.length) {
+        //     const ch = text.charCodeAt(pos);
+        //     pos++;
+        //     switch (ch) {
+        //         case CharacterCodes.carriageReturn:
+        //             if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
+        //                 pos++;
+        //             }
+        //         // falls through
+        //         case CharacterCodes.lineFeed:
+        //             result.push(lineStart);
+        //             lineStart = pos;
+        //             break;
+        //         default:
+        //             if (ch > CharacterCodes.maxAsciiCharacter && isLineBreak(ch)) {
+        //                 result.push(lineStart);
+        //                 lineStart = pos;
+        //             }
+        //             break;
+        //     }
+        // }
+        // result.push(lineStart);
+        // return result;
+        return native.computeLineStarts(text);
     }
 
     export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;

@@ -102,3 +102,4 @@ tests/cases/user/prettier/prettier
 target
 *.node
 demo
+*.log

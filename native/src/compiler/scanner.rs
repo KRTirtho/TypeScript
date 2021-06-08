@@ -1,11 +1,11 @@
 use std::convert::TryInto;
 
-use napi::{CallContext, JsBoolean, JsNumber, JsObject, Result};
+use napi::{CallContext, JsBoolean, JsFunction, JsNumber, JsObject, JsString, Result};
 use napi_derive::js_function;
 
 use super::types::{
-    CommentDirective, IDiagnosticMessage, JSDocSyntaxKind, JsxTokenSyntaxKind, LanguageVariant,
-    PunctuationSyntaxKind, ScriptTarget, SyntaxKind, TokenFlags, TokenSyntaxKind,
+    CharacterCodes, CommentDirective, IDiagnosticMessage, JSDocSyntaxKind, JsxTokenSyntaxKind,
+    LanguageVariant, PunctuationSyntaxKind, ScriptTarget, SyntaxKind, TokenFlags, TokenSyntaxKind,
 };
 
 pub type ErrorCallback<'a> = dyn Fn(IDiagnosticMessage<'a>) -> &'a str;
@@ -96,7 +96,7 @@ const COMMENT_DIRECTIVE_REG_EX_SINGLE_LINE: &str = "^///?\\s*@(ts-expect-error|t
 const COMMENT_DIRECTIVE_REG_EX_MULTI_LINE: &str = "^(?:/|*)*\\s*@(ts-expect-error|ts-ignore)";
 
 #[js_function(2)]
-pub fn lookup_in_unicode_map(mut cx: CallContext) -> Result<JsBoolean> {
+pub fn lookup_in_unicode_map(cx: CallContext) -> Result<JsBoolean> {
     let code: u32 = cx
         .get::<JsNumber>(0)?
         .try_into()
@@ -140,4 +140,52 @@ pub fn lookup_in_unicode_map(mut cx: CallContext) -> Result<JsBoolean> {
     }
 
     cx.env.get_boolean(true)
+}
+
+fn is_line_break(ch: u32) -> bool {
+    ch == CharacterCodes::LINE_FEED
+        || ch == CharacterCodes::CARRIAGE_RETURN
+        || ch == CharacterCodes::LINE_SEPARATOR
+        || ch == CharacterCodes::PARAGRAPH_SEPARATOR
+}
+
+#[js_function(2)]
+pub fn compute_line_starts(cx: CallContext) -> Result<JsObject> {
+    let str_err = "expected a string";
+    let text: String = cx
+        .get::<JsString>(0)
+        .expect(str_err)
+        .into_utf8()
+        .expect(str_err)
+        .as_str()
+        .expect(str_err)
+        .to_string();
+    let u32_err = "failure at converting u32 to JsNumber";
+
+    let mut result = cx.env.create_array()?;
+    let mut res_index = 0;
+
+    for (index, arg) in text.chars().enumerate() {
+        let ch = arg as u32;
+        if index == 0 {
+            result
+                .set_element(res_index, cx.env.create_uint32(0).expect(u32_err))
+                .expect(u32_err);
+            res_index += 1;
+        }
+        if (ch == CharacterCodes::LINE_FEED)
+            || ch > CharacterCodes::MAX_ASCII_CHARACTER && is_line_break(ch)
+        {
+            result
+                .set_element(
+                    res_index,
+                    cx.env.create_uint32((index + 1) as u32).expect(u32_err),
+                )
+                .expect(u32_err);
+            res_index += 1;
+            continue;
+        }
+    }
+
+    Ok(result)
 }
